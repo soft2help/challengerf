@@ -1,0 +1,14 @@
+
+fos_oauth_server_token:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
+
+fos_oauth_server_authorize:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"
+
+app_oauth_server_auth_login:
+    path:  /oauth/v2/auth_login
+    defaults: { _controller: App\Controller\Oauth2\SecurityController::loginAction }
+    
+app_oauth_server_auth_login_check:
+    path:  /oauth/v2/auth_login_check
+    defaults: { _controller: App\OauthBundle\Controller\SecurityController::loginCheckAction }    

@@ -1,0 +1,167 @@
+imports:
+    - { resource: ../nelmios/definitions.yaml }
+    - { resource: ../nelmios/paths.yaml }
+
+nelmio_api_doc:
+    models: { use_jms: false }
+    documentation:       
+        host: rfchallenge.soft2help.net
+        schemes: [https]
+        info:
+            title: rfchallenge
+            description: This is the api to challenge by real fevr
+            version: 1.0.0
+        securityDefinitions:
+            cookieAuth:
+                type: apiKey
+                in: cookie
+                name: SESSIONID
+            oauth2:
+                type: oauth2
+                description: 'Authentication via oauth2'
+                flow: accessCode
+                authorizationUrl: https://rfchallenge.soft2help.net/oauth/v2/auth
+                tokenUrl: https://rfchallenge.soft2help.net/oauth/v2/token
+                scopes:                   
+                    profesional: Grants read and write access to administrative information
+        security:
+            - cookieAuth: []
+            - oauth2: [profesional]
+                                                
+        paginator:
+            parameters:
+                - "$ref": "#/parameters/Pagina"
+                - "$ref": "#/parameters/numItemsPorPagina"
+                - "$ref": "#/parameters/filtrar"
+                - "$ref": "#/parameters/ordenar"
+                - "$ref": "#/parameters/campos"                   
+               
+        parameters:
+            mensajeId:
+                name: "mensajeId"
+                in: path
+                description: Identificador del mensaje
+                required: true
+                type: string                              
+            defaultPeriodoFiltro:
+                name: "defaultPeriodoFiltro"
+                in: path
+                description: El periodo para filtrar los resultados todos|hoy|semana|mes|ano
+                required: true
+                type: string
+                default: todos
+            Ajax:
+                name: X-Requested-With
+                in: header
+                description: Header para la petición ajax
+                type: string
+                required: true
+                default: XMLHttpRequest           
+            Pagina:
+                name: pagina
+                in: query
+                description: Pone la pagina actual por defecto pone 1
+                required: false
+                type: integer
+                default: 1
+            numItemsPorPagina:
+                name: numItemsPorPagina
+                in: query
+                description: Numero de items por pagina
+                required: false
+                type: integer
+                default: 10
+            filtrar:
+                name: filtrar[]
+                in: query
+                description: >
+                    filtrar por los campos definidos en la respuesta hasta 2 nivel ex: filtro[]=campo1|termino1&filtro[]=campo2|termino2 o filtro[]=termino
+                    si no pone el delimitador ignora todos los filtro por campo las busquedas campo|termino son AND y las busquedas por solo termino son OR"
+                type: array
+                collectionFormat: multi
+                items:
+                    type: string
+                    
+            ordenar:
+                name: ordenar[]
+                in: query
+                description: >
+                    ordena por los campos definidos en la respuesta hasta 2 nivel ex: ordenar[]=field|direccion&ordenar[]=field2|direccion o ordenar[]=campo la direccion por defecto es DESC
+                type: array
+                items:
+                    type: string 
+            campos:
+                name: campos
+                in: query
+                description: >
+                    devuelve solamente los campos definidos en las respuesta por el 1 nivel ex: campos=campo1,campo2 
+                type: array
+                collectionFormat: csv
+                items:
+                    type: string
+            datatables-start:
+                name: start
+                in: query
+                description: Offset for pagination (0 based - 0 is the first record)
+                required: false
+                type: integer
+            datatables-length:
+                name: length
+                in: query
+                description: Limit the number of records returned for pagination
+                required: false
+                type: integer
+            datatables-search-value:
+                name: search[value]
+                in: query
+                description: Perform a text search across all records for this string
+                required: false
+                type: string
+            datatables-order-column:
+                name: order[i][column]
+                in: query
+                description: Size of array
+                required: false
+                type: integer
+            datatables-order-dir:
+                name: order[i][dir]
+                in: query
+                description: Size of array
+                required: false
+                type: string
+                enum: ["asc", "desc"]
+            datatables-columns-data:
+                name: columns[i][data]
+                in: query
+                description: The database field name of the column displayed at index `i`
+                required: false
+                type: string
+            datatables-columns-name:
+                name: columns[i][name]
+                in: query
+                description: The human-readable name of the column displayed at index `i`
+                required: false
+                type: string
+                
+                
+            
+                      
+    areas: # to filter documented areas
+        admin:
+            path_patterns:
+                - ^/api/admin
+        player:
+            path_patterns:
+                - ^/api/player
+        notification:
+            path_patterns:
+                - ^/api/static
+        default:
+            path_patterns:
+                - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+                - ^/html
+            
+       
+           
+    
+            

@@ -1,0 +1,12 @@
+parameters:
+    mail.noreply: "noreply@mail.com"
+    mail.sender_name: "sender"
+    mail.transport: smtp
+    mail.username: '%env(MAIL_USERNAME)%'
+    mail.password: '%env(MAIL_PASSWORD)%'
+    mail.encryption: tls
+    mail.host: '%env(MAIL_HOST)%'
+    mail.port: 587
+    mail.auth_mode: login
+        
+    

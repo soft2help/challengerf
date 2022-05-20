@@ -1,0 +1,77 @@
+security:
+        
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha512
+    
+    role_hierarchy:        
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_ADMIN: [ROLE_USER]
+        
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username_email
+    
+    firewalls: 
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        
+        oauth_token:
+            pattern: ^/oauth/v2/token
+            security: false
+
+        oauth_authorize:
+            pattern: ^/oauth/v2/auth
+            form_login:
+                provider: fos_userbundle
+                check_path: /oauth/v2/auth_login_check
+                login_path: /oauth/v2/auth_login
+                use_referer: true
+            anonymous: true
+        api_doc:
+            pattern: ^/api/doc           
+            anonymous: true
+       
+        # api:
+        #     pattern: ^/api
+        #     fos_oauth: true
+        #     stateless: true
+        #     anonymous: true
+
+       
+            
+        secured_area:
+            entry_point: App\EventListener\AuthenticationEntryPoint
+            anonymous: ~
+            fos_oauth: true
+            pattern: ^/
+            user_checker: App\Security\UserChecker
+            form_login:
+                provider: fos_userbundle
+                check_path: fos_user_security_check  
+                login_path: fos_user_security_login
+                success_handler: app.security.authentication_handler
+                failure_handler: app.security.authentication_handler
+                #csrf_token_generator: security.csrf.token_manager
+                #csrf_token_id: authenticate
+            logout:
+                path:   /logout
+                target: /login
+                handler: [app.security.logoutHandler]                
+
+            switch_user: 
+                role: ROLE_SUPER_ADMIN
+                provider: fos_userbundle
+
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 2629746
+                path: /
+
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/api/doc, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
+        - { path: ^/api, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }       
+        - { path: ^/createClient, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }

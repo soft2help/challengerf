@@ -1,0 +1,101 @@
+imports:
+    - { resource: parameters.yaml }
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+    
+    app.eventlistener.exception:
+        class: App\EventListener\ExceptionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
+    app.eventlistener.myrequest:
+        class: App\EventListener\MyRequestListener
+        tags:
+            - { name: kernel.event_listener, priority: 2048 }
+    
+    
+    App\DataFixtures\:
+        resource: ../src/DataFixtures/*
+        tags: ['doctrine.fixture.orm']
+
+    App\Helpers\Normalizer\DateTimeFormatNormalizer:
+        arguments:
+            - 'Y-m-d H:i:s'
+            - '@serializer.normalizer.object'
+
+    sensio_framework_extra.view.listener:
+        alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    
+    app.requestListener:
+        class: App\EventListener\MyRequestListener
+        public: true
+
+    FOS\UserBundle\Mailer\TwigSwiftMailer:
+        alias: fos_user.mailer.twig_swift
+        public: true
+    
+    nelmio_api_doc.describers.quitarPaths:
+        class: App\Helpers\Nelmios\defaultDescriber
+        arguments: 
+            - '@request_stack'
+        tags:
+            - { name: nelmio_api_doc.describer, priority: -3000 }
+
+       
+    kernel.listener.command_dispatch:
+        class: App\Helpers\Console\ConsoleCommandListener
+        arguments:
+            - "@app.requestListener"
+        tags:
+            - { name: kernel.event_listener, event: console.command }
+
+    app.security.authentication_handler:
+        class: App\Helpers\Login\AuthenticationHandler
+        public: false
+        arguments:
+            - '@router'
+            - '@session'
+            - '@translator'
+
+    app.security.logoutHandler:
+            class: App\Helpers\Logout\LogoutListener
+            arguments:
+                - '@fos_user.user_manager'
+
+       
+    App\Helpers\Fixes\AuthorizeController:
+        decorates: fos_oauth_server.controller.authorize
+        arguments: 
+            - '@request_stack'
+            - '@fos_oauth_server.authorize.form'
+            - '@fos_oauth_server.authorize.form.handler'
+            - '@fos_oauth_server.server'
+            - '@templating'
+            - '@security.token_storage'
+            - '@router'
+            - '@fos_oauth_server.client_manager'
+            - '@event_dispatcher'
+            - '@session'
+            - '%fos_oauth_server.template.engine%'
+
+    App\Controller\SecurityController:
+        arguments:
+            - '@security.csrf.token_manager' 

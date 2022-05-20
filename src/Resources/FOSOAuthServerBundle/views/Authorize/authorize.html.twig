@@ -1,0 +1,50 @@
+{% extends '/base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">        
+            <img src="{{ asset('build/images/logo.png') }}" style="width:100px; height:auto;" alt="Logo">
+        </div>
+      
+        <div>
+            La aplicación {{ client.appName }} require permisos de accesos a la API.
+            <small>{{client.description}}</small> 
+            <b>Estos son los permisos requiridos</b>
+            <ul style="list-style: none;">
+                {% for scope in scopes %}
+                    <li><input type="checkbox" value="{{ scope }}" checked class="scopes">  {{ scope|trans }}</li>
+                {% endfor %}
+            </ul>
+
+
+        </div>
+        {% include "FOSOAuthServerBundle:Authorize:authorize_content.html.twig" %}
+        <!-- /.login-box-body -->
+    </div>
+    <!-- /.login-box -->
+    <!-- Main Footer -->
+    {% include 'bundles/FOSUserBundle/Security/footer.html.twig' %}
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script>
+            $(".scopes").on("change",function(){
+                let scopes="";
+                $.each($(".scopes:checked"),function(){
+                    scopes+=$(this).val()+" ";
+                });
+
+                scopes=scopes.trim();
+                $("#fos_oauth_server_authorize_form_scope").val(scopes);
+
+            });
+
+
+        </script>
+    {% endblock %}
+
+</body>
+{% endblock %}

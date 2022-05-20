@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain 'FOSUserBundle' %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+<body class="hold-transition login-page">
+<div class="login-box">
+    <div class="login-logo"> 
+        <a href="/" title="{{ 'security.login.login'| trans({},"messages") }}">      
+            <img src="{{ asset('build/images/logo-small.png') }}" alt="Logo">
+        </a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+        <p>
+			{{ 'resetting.check_email'|trans({'%tokenLifetime%': tokenLifetime})|nl2br }}
+		</p><br>
+        <a href="/" title="{{ 'security.login.login'| trans({},"messages") }}">      
+            {{ 'security.makeLogin' | trans({},"messages") }}
+        </a>
+    </div>
+    <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+<!-- Main Footer -->
+{% include 'bundles/FOSUserBundle/Security/footer.html.twig' %}
+
+
+</body>
+{% endblock %}

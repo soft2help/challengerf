@@ -1,0 +1,33 @@
+{% extends '/base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">        
+            <img src="{{ asset('build/images/logo.png') }}" style="width:100px; height:auto;" alt="Logo">
+        </div>
+        {% include "FOSOAuthServerBundle:Authorize:authorize_content.html.twig" %}
+        <!-- /.login-box-body -->
+    </div>
+    <!-- /.login-box -->
+    <!-- Main Footer -->
+    {% include 'bundles/FOSUserBundle/Security/footer.html.twig' %}
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script>
+    //      @TODO
+    //        $(function () {
+    //            $("#remember_me[type='checkbox']").iCheck({
+    //                checkboxClass: 'icheckbox_square-blue',
+    //                radioClass: 'iradio_square-blue',
+    //                increaseArea: '20%' // optional
+    //            });
+    //        });
+        </script>
+    {% endblock %}
+
+</body>
+{% endblock %}

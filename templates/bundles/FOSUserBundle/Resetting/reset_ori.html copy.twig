@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain 'FOSUserBundle' %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+<body class="hold-transition login-page">
+<div class="login-box">
+    <div class="login-logo">
+                
+         <img src="{{ asset('build/images/logo.png') }}" style="width:100px; height:auto;" alt="Logo">
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body" style="width:100%;">
+        <p>
+			{% include "@FOSUser/Resetting/reset_content.html.twig" %}
+		</p>
+    </div>
+    <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+<!-- Main Footer -->
+{% include 'bundles/FOSUserBundle/Security/footer.html.twig' %}
+
+
+</body>
+{% endblock %}

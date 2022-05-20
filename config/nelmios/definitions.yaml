@@ -1,0 +1,96 @@
+nelmio_api_doc:
+    documentation:
+        definitions:            
+            formErrors:
+                description: Error definition that can be generate when form is received
+                type: object
+                properties:
+                    errors:
+                        type: array
+                        items:
+                            type: string
+                            example: "There are errors in form"
+                    fieldErrors:
+                        type: array
+                        items:
+                            type: object
+                            properties:
+                                field:
+                                    type: string
+                                    example: birthdate
+                                errors:
+                                    type: array
+                                    items:
+                                        type: string
+                                        example: "el formato de fecha es incorrecto"
+            datatables:
+                description: datatables definition
+                type: object
+                properties:
+                    draw:
+                        type: integer
+                    recordsTotal:
+                        type: integer
+                    recordsFiltered:
+                        type: integer
+                    data:
+                        type: array
+                        items:
+                            type: object
+            Paginator:
+                description: datatables definition
+                type: object
+                properties:
+                    paginaActual:
+                        type: integer
+                        example: 1
+                    numItemsPorPagina:
+                        type: integer
+                        example: 10
+                    total:
+                        type: integer
+                        example: 200
+                    numPaginas:
+                        type: integer
+                        example: 20
+                    items:
+                        type: array
+                        items:
+                            type: object                                                              
+            Error:
+                description: Error defined by status code, That can be 4XX
+                type: object
+                properties:
+                    code:
+                        type: string
+                        example: "500"
+                    message:
+                        type: string
+                        example: "Error interno del servidor"
+                required:
+                    - code
+                    - message
+            Page:
+                in: "query"
+                name: "page"
+                description: "A página actual do resultado, por defeito *1*"
+                type: integer
+            Success:
+                description: Default json in case of success
+                type: object
+                properties:
+                    success:
+                        type: boolean
+                        example: true                                      
+                required:
+                    - success
+            base64:
+                description: file in json format
+                type: object
+                properties:
+                    archivo:
+                        type: string 
+                        example: data:image/png;base64,iVBORw0KGgoAAAANSUhEUg...                                     
+                required:
+                    - archivo 
+              

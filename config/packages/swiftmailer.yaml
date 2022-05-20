@@ -1,0 +1,11 @@
+swiftmailer:
+    default_mailer: default
+    mailers:
+        default:
+            transport: '%mail.transport%'
+            username: '%mail.username%'
+            password: '%mail.password%'
+            encryption: '%mail.encryption%'
+            host: '%mail.host%'
+            port: '%mail.port%'
+            auth-mode: '%mail.auth_mode%' 

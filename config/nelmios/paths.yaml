@@ -1,0 +1,64 @@
+nelmio_api_doc:
+    documentation:
+        paths:            
+            "/login":
+                "get":
+                    tags:
+                        - "Authentication"
+                    produces: 
+                        - "text/html"
+                    summary: Return html with form to authenticate
+                    description: >
+                        Endpoint that return html with form field to user make login in browser 
+                        this form should contain fields that will be sent to endpoint /login_check
+            "/login_check":
+                "post":
+                    tags:
+                        - "Authentication"
+                    "summary": "Endpoint to make login via ajax"
+                    "description": "asdasd"
+                    parameters:
+                        - "$ref": "#/parameters/Ajax"
+                        - name: _username
+                          in: formData
+                          description: Usernam
+                          type: string
+                          required: true
+                        - name: _password
+                          in: formData
+                          description: password
+                          type: string
+                          required: true                        
+                        - name: _remember_me
+                          in: formData
+                          description: "keep session active" 
+                          type: boolean
+                          enum: ["true","false"]
+                    responses:
+                        success:
+                            description: >
+                                You was logued with success
+                                You need to send cookie configured with session in after resquests
+                            schema:                               
+                                $ref: "#/definitions/Success"                                     
+                            headers:                                
+                                "Set-Cookie":
+                                    description: "SESSIONID=4d3u8je9t6l5d8oi3hfcf48lld; path=/; secure; HttpOnly; SameSite=lax"
+                                    type: string                                    
+                                "Set-Cookie ":
+                                    description: "REMEMBERME=QXBwXEVudGl0eVxVc2VyOmJIVnBjMEJ6YjJaME1taGxiSEF1Ym1WMDoxNTkxODI2NzE2OmVhMWRlNDgwZDQ1NmE4ZWU1M2QyYWIxOWI2N2RiYmJmNmRlMGZiMjA4ZjQ2MWVlYjY2NzdiNTMxMmRjZWUxZTc%3D; expires=Wed, 10-Jun-2020 22:05:16 GMT; Max-Age=2629746; path=/; secure; httponly; samesite=lax"
+                                    type: string
+            "/logout":
+                "get":                    
+                    tags:
+                        - "Authentication"
+                    "summary": "Endpoint to make logout in actual session"
+                    "description": "Endpoint to make logout in actual session" 
+                    parameters:
+                        - "$ref": "#/parameters/Ajax"
+                    responses:
+                        success:
+                            description: >
+                               Logout from the current session
+                            schema:                               
+                                $ref: "#/definitions/Success"

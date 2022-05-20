@@ -1,0 +1,3 @@
+fos_user:
+    resetting:
+      retry_ttl: 0

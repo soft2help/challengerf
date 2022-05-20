@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+
+{% block header %}
+    <h1 class="text-red text-center error-title">{{ 'app.error403_title'|trans }}</h1>
+{% endblock %}
+
+{% block content %}
+    <p class="text-center">{{ 'app.error403_text'|trans }}</p>
+    <p class="text-center">{{ 'app.error_text2'|trans }}</p>
+{% endblock %}

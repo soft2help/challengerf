@@ -1,0 +1,16 @@
+{% extends '@!NelmioApiDoc/SwaggerUi/index.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}        
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    
+    {% endblock stylesheets %}
+{% block header %}
+    <a id="logo" href="">
+        
+    </a>
+{% endblock header %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('/build/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/build/nelmios/custom.js') }}"></script>
+{% endblock javascripts %}

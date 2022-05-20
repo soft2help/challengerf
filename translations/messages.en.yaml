@@ -1,0 +1,5 @@
+app.dateFormat: "d/m/Y"
+app.dateTimeFormat: "Y-m-d"
+app.defaultErrorResponse: "Default response with errors, the status code of http response can be 400, 401, 404, o el 5XX"
+app.defaultFormErrorResponse: "Reponse if there are error in form"
+

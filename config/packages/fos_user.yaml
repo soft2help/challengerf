@@ -1,0 +1,13 @@
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: App\Entity\User
+    service:     
+      mailer: fos_user.mailer.twig_swift
+    from_email:
+      address: "%mail.noreply%"
+      sender_name: "%mail.sender_name%"
+    resetting:
+      email:
+          template: bundles/FOSUserBundle/Resetting/email.html.twig
+      retry_ttl: 900

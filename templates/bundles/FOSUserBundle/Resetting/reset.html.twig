@@ -1,0 +1,13 @@
+{% extends 'modulos/base/root.html.twig' %}
+{% block body %}
+<body>
+<body class="h100 w100" data-name="Reset">    
+    <div id="resetPassword" class="w100 h100">
+        {% include 'login/dashboardChangePassword.html.twig' %}
+    </div>
+    {% block jsFiles %}
+        {{ parent() }}
+        <script src="/build/js/egym/login.js" type="text/javascript"></script>
+    {% endblock %}
+</body>
+{% endblock %}
