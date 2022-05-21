@@ -70,3 +70,9 @@ Create admin user with command line to access backoffice
 ```
 /var/www$ sudo php bin/console user:admin:add --username=admin@admin.com --password=Rf2022_
 ```
+
+Create user to access backoffice (use a real email to receive notifications from subcribed players)
+
+```
+/var/www$ sudo php bin/console user:user:add --username=user@user.com --password=Rf2022_
+```
