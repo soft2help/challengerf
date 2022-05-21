@@ -125,3 +125,11 @@ if anything failed with messenger you can check it
 ```
 /var/www$ sudo  php bin/console messenger:failed:show
 ```
+
+To run unit test 
+
+```
+/var/www$ sudo  php bin/phpunit
+```
+
+you can append --debuf if you want more details
