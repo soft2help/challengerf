@@ -47,3 +47,8 @@ After that you should create tables with command
 ```
 /var/www$ sudo -u www-data php bin/console doctrine:schema:update --force
 ```
+
+Populate players table with fixture task
+```
+/var/www$ sudo -u www-data php bin/console  doctrine:fixtures:load --group=importplayers --append
+``` 
