@@ -5,10 +5,10 @@ imports:
 nelmio_api_doc:
     models: { use_jms: false }
     documentation:       
-        host: rfchallenge.soft2help.net
+        host: challengerf.soft2help.net
         schemes: [https]
         info:
-            title: rfchallenge
+            title: challengerf
             description: This is the api to challenge by real fevr
             version: 1.0.0
         securityDefinitions:
@@ -20,8 +20,8 @@ nelmio_api_doc:
                 type: oauth2
                 description: 'Authentication via oauth2'
                 flow: accessCode
-                authorizationUrl: https://rfchallenge.soft2help.net/oauth/v2/auth
-                tokenUrl: https://rfchallenge.soft2help.net/oauth/v2/token
+                authorizationUrl: https://challengerf.soft2help.net/oauth/v2/auth
+                tokenUrl: https://challengerf.soft2help.net/oauth/v2/token
                 scopes:                   
                     profesional: Grants read and write access to administrative information
         security:
