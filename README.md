@@ -54,4 +54,8 @@ Populate players table with fixture task
 ``` 
 *--append its important because append the fixture instead of flushing the database
 
+To add a Admin user fixture you can use 
 
+```
+/var/www$ sudo -u www-data php bin/console  doctrine:fixtures:load --group=defaultsuperadmin --append
+``` 
