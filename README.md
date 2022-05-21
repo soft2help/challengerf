@@ -132,4 +132,4 @@ To run unit test
 /var/www$ sudo  php bin/phpunit
 ```
 
-you can append --debuf if you want more details
+you can append --debug if you want more details
