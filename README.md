@@ -52,3 +52,6 @@ Populate players table with fixture task
 ```
 /var/www$ sudo -u www-data php bin/console  doctrine:fixtures:load --group=importplayers --append
 ``` 
+*--append its important because append the fixture instead of flushing the database
+
+
