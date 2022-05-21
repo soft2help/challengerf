@@ -1,0 +1,32 @@
+div(style="display: none")
+    form.player
+        h3.playerTitle New Player
+        .name
+            label.form-label Name
+            input.form-control.name(name="name")
+            .invalid-feedback
+        .nationality
+            label.form-label Nationality
+            input.form-control.nationality(name="nationality")
+            .invalid-feedback
+        .birthdate
+            label.form-label Birthdate
+            input.form-control.digits.birthdate(name="birthdate", type="date", data-date-immediate-updates="true")
+            .invalid-feedback
+        .position
+            label.form-label Position
+            select.form-select.position(name="position")
+                option(value="G") G
+                option(value="D") D
+                option(value="M") M
+                option(value="A") A
+            .invalid-feedback
+        .number
+            label.form-label Number
+            select.form-select.number(name="number:number")
+                option(value="") --
+                - var n = 0;
+                while n <= 99
+                    - n++
+                    option(value=""+n)= n
+            .invalid-feedback

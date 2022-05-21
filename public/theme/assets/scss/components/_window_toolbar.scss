@@ -1,0 +1,64 @@
+.not-visible{
+    display: none;
+}
+
+.settings{
+    background-color: white;
+    .monitorInfo{
+        width: 100%; 
+        position: relative; 
+        background-color: white;
+        .monitor{
+            background-color:#1E2F65;
+            margin: 5px; 
+            color: white; 
+            position: absolute;
+            .grid{
+                position: relative;
+                .cell{
+                    cursor: pointer;
+                    position: absolute;
+                }
+            }
+        }
+    }
+}
+
+.window-toolbar{
+    height:$window-toolbar-height;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    top: 0px;
+    left: 0px;
+    
+    .collapse-expand{
+        left: 50%;
+        margin-left: -5px;
+        top: 20px;
+        z-index:1000;
+        cursor:pointer;
+    }
+    .controls{
+        .move-window{
+            width: 10%;
+            -webkit-app-region: drag;
+            line-height:$window-toolbar-height;
+            cursor: move;
+        }
+        .bottons{
+        }
+    }    
+
+    i{
+        cursor:pointer;
+    }
+}
+
+.clear{
+    clear: both;
+}
+
+.content{
+    height: 100%;
+    overflow: auto;
+}

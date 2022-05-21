@@ -1,0 +1,23 @@
+// footer start
+if footer_dark
+  footer.footer.footer-dark(class=!sidebar && "m-t-0 m-l-0")
+       .container-fluid
+            .row
+                .col-md-12.footer-copyright.text-center
+                    p.mb-0 Copyright 2022 ©                  
+                    
+
+else if footer_fix
+  footer.footer.footer-fix(class=!sidebar && "m-t-0 m-l-0")
+       .container-fluid
+            .row
+                .col-md-12.footer-copyright.text-center
+                    p.mb-0 Copyright 2022 ©
+
+else
+  footer.footer(class=!sidebar && "m-t-0 m-l-0")
+       .container-fluid
+            .row
+                .col-md-12.footer-copyright.text-center
+                    p.mb-0 Copyright 2022 ©  
+
