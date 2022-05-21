@@ -1,4 +1,44 @@
 # Repository for rf challenge
+## Usage
+
+I already have a endpoint where you can test it 
+
+https://challengerf.soft2help.net/
+
+To check Api docs
+
+https://challengerf.soft2help.net/api/doc
+
+To make login
+
+https://challengerf.soft2help.net/login
+
+
+For demo porpuses
+
+* Admin access:
+
+**username:** admin@admin.com
+
+**password:** Rf2022_
+
+* User access:
+
+**username:** tiago.bem at realfevr.com
+
+**password:** Rf2022_
+ 
+
+
+##############
+
+**username:** bruno.coelho at realfevr.com
+
+**password:** Rf2022_
+
+
+After access in the right upper side icon you have allowed views, with user access you can configure subscriptions to the players and in admin dashboard you can send notifications
+
 
 ## Stack and instructions to install and run
 
@@ -133,3 +173,8 @@ To run unit test
 ```
 
 you can append --debug if you want more details
+
+##TODO
+- Websocket connection with nodejs websocket server, to send notifications in real time when user is logged in or receive player updates
+- List of Subscriptions by player in admin dashboard
+- More unit tests

@@ -4,9 +4,9 @@ parameters:
     mail.transport: smtp
     mail.username: '%env(MAIL_USERNAME)%'
     mail.password: '%env(MAIL_PASSWORD)%'
-    mail.encryption: tls
+    mail.encryption: ssl
     mail.host: '%env(MAIL_HOST)%'
-    mail.port: 587
+    mail.port: 465
     mail.auth_mode: login
         
     
