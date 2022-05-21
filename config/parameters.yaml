@@ -1,6 +1,6 @@
 parameters:
-    mail.noreply: "noreply@mail.com"
-    mail.sender_name: "sender"
+    mail.noreply: "%env(MAIL_NOREPLY)%"
+    mail.sender_name: "rfchallenge"
     mail.transport: smtp
     mail.username: '%env(MAIL_USERNAME)%'
     mail.password: '%env(MAIL_PASSWORD)%'

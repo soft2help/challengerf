@@ -21,6 +21,8 @@ use Omines\DataTablesBundle\Column\TextColumn;
 use Omines\DataTablesBundle\Column\NumberColumn;
 use Omines\DataTablesBundle\Column\DateTimeColumn;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Messenger\MessageBusInterface;
+use App\Message\SendEmail;
 
 /**
  * Player Controller.
@@ -338,7 +340,7 @@ class PlayerController extends HelperController{
    * @SWG\Response(response="400", description=DEFAULTFORMERRORDESCRIPTION, @SWG\Schema(ref= "#/definitions/formErrors"))
    */
 
-  public function newNotificationAction(Request $request){
+  public function newNotificationAction(Request $request, MessageBusInterface $messageBus){
     /** @var HelperController|PlayerTrait $this */
 
     $player = $this->getPlayerFromRequest($request);
@@ -354,7 +356,12 @@ class PlayerController extends HelperController{
     $this->getManager()->flush();
 
     //dispatch event to send email to subscribed users
+    $htmlMail = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/theme/mail/index.html");
+    $htmlMail = str_replace("{host}", $this->getRequest()->getSchemeAndHttpHost(), $htmlMail);
 
+    $messageBus->dispatch(new SendEmail($notification->getId(), $htmlMail));
+
+    return $this->successResponse("The notification was created");
     return $this->successResponse("The notification was created");
   }
 
