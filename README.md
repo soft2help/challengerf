@@ -41,6 +41,11 @@ FLUSH PRIVILEGES;
 Configure .env file to load configurations to database access  i will put some example in database url, to see notation
 ```
 DATABASE_URL=mysql://rfchallenge:PASSWORD@localhost:3306/rfchallenge
+MAIL_NOREPLY=noreply@mail.net
+MAIL_PASSWORD=
+MAIL_USERNAME=
+MAIL_HOST=
+MESSENGER_TRANSPORT_DSN=doctrine://default
 ```
 
 After that you should create tables with command
@@ -111,4 +116,12 @@ To check documentation about api you can use public endpoint from your browser
 
 **/api/doc**
 
+To start queue system to send notifications in background, to put it as a background process check  https://symfony.com/doc/current/messenger.html#supervisor-configuration
+```
+/var/www$ sudo  php bin/console messenger:consume async -vv
+```
 
+if anything failed with messenger you can check it
+```
+/var/www$ sudo  php bin/console messenger:failed:show
+```
