@@ -12,7 +12,7 @@ trait dateTrait{
      * @var \DateTime
      * @ORM\Column(name="CreateDate", type="datetime", nullable=false)
      * @Assert\DateTime()
-     * @SWG\Property(example="22/09/2020 20:20:30", description=DATEFORMAT) 
+     * @SWG\Property(example="22/09/2020 20:20:30", description="format date it will depends of denormalizer or normalizer") 
      * @Groups({"date"})
      */
     private $date;
