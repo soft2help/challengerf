@@ -43,3 +43,7 @@ Configure .env file to load configurations to database access  i will put some e
 DATABASE_URL=mysql://rfchallenge:PASSWORD@localhost:3306/rfchallenge
 ```
 
+After that you should create tables with command
+```
+/var/www$ sudo -u www-data php bin/console doctrine:schema:update --force
+```
