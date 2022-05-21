@@ -59,3 +59,9 @@ To add a Admin user fixture you can use
 ```
 /var/www$ sudo -u www-data php bin/console  doctrine:fixtures:load --group=defaultsuperadmin --append
 ``` 
+
+To add a default user fixture you can use 
+
+```
+/var/www$ sudo -u www-data php bin/console  doctrine:fixtures:load --group=defaultuser --append
+``` 
