@@ -15,6 +15,12 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Omines\DataTablesBundle\DataTableFactory;
+use Omines\DataTablesBundle\DataTable;
+use Omines\DataTablesBundle\Column\TextColumn;
+use Omines\DataTablesBundle\Column\NumberColumn;
+use Omines\DataTablesBundle\Column\DateTimeColumn;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Player Controller.
@@ -100,6 +106,160 @@ class PlayerController extends HelperController{
     return $this->successResponse("The player was created");
   }
 
+  /**
+   * return notification list associtated with player in json response ready to be processed by datatables component in frontend
+   * 
+   * @Route("/{playerId}/notifications", methods={"POST"}, options={"expose"=true}, name="notifications")
+   * @IsGranted({"ROLE_SUPER_ADMIN"})
+   * @SWG\Tag(name="Player")
+   * @SWG\Response(response="200",
+   *                description="return player list",              
+   *                @SWG\Definition(definition="paginator",
+   *                   allOf={
+   *                     @SWG\Schema(ref="#/definitions/datatables"),
+   *                     @SWG\Schema(
+   *                       @SWG\Property(
+   *                         property="data",
+   *                         type="array",
+   *                          @SWG\Items(ref=@Model(type=App\Entity\Challenge\Notification::class, groups={"Notification", "Id"}))
+   *                        )
+   *                     )
+   *                  })
+   * )
+   * @SWG\Response(response="default", description=DEFAULTERRORDESCRIPTION, @SWG\Schema(ref= "#/definitions/Error"))
+   */
+  public function listNotificationFromPlayerAction(Request $request, DataTableFactory $dataTableFactory){
+    header('Access-Control-Allow-Origin: *');
+    $player = $this->getPlayerFromRequest();
+
+    $table = $dataTableFactory
+      ->create(['pageLength' => 100])
+      ->add('id', TextColumn::class, ['visible' => false, 'field' => 'n.id'])
+      ->add('message', TextColumn::class, ['field' => 'n.message', 'label' => "Message", 'orderable' => true])
+      ->add('date', DateTimeColumn::class, ['field' => 'n.date', 'format' => 'd/m/Y', 'label' => 'Date Add', 'orderable' => true])
+      ->add('options', TextColumn::class, ['label' => '...', 'className' => 'text-center', 'render' => function ($value, $context) {
+
+        return "
+                        
+                        <button type=\"button\" class=\"btn btn-danger btn-xs font-dark deleteNotification\" data-notificationId=\"{$context->getId()}\">
+                          <span class=\"fa fa-trash\"></span> 
+                        </button>
+                        ";
+      }])
+      ->createAdapter(ORMAdapter::class, [
+        'entity' => Notification::class,
+        'query' => function (QueryBuilder $builder) use ($player) {
+          $builder
+            ->select(['n', 'p'])
+            ->from(Notification::class, 'n')
+            ->leftJoin('n.player', 'p')
+            ->andWhere($builder->expr()->eq('p.id', ':playerId'))
+            ->setParameter('playerId', $player->getId());;
+        }
+      ])
+      ->addOrderBy('date', DataTable::SORT_DESCENDING)
+      ->handleRequest($request);
+
+
+    if ($table->isCallback())
+      return $table->getResponse();
+  }
+
+  /**
+   * return player list in json response ready to be processed by datatables component in frontend
+   * 
+   * @Route("/list", methods={"POST"}, options={"expose"=true}, name="list")
+   * @IsGranted({"ROLE_USER"})
+   * @SWG\Tag(name="Player")
+   * @SWG\Response(response="200",
+   *                description="return player list",              
+   *                @SWG\Definition(definition="paginator",
+   *                   allOf={
+   *                     @SWG\Schema(ref="#/definitions/datatables"),
+   *                     @SWG\Schema(
+   *                       @SWG\Property(
+   *                         property="data",
+   *                         type="array",
+   *                          @SWG\Items(ref=@Model(type=App\Entity\Challenge\Player::class, groups={"Player", "Id"}))
+   *                        )
+   *                     )
+   *                  })
+   * )
+   * @SWG\Response(response="default", description=DEFAULTERRORDESCRIPTION, @SWG\Schema(ref= "#/definitions/Error"))
+   * 
+   */
+  public function listAction(Request $request, DataTableFactory $dataTableFactory){
+    $isUser=!$this->getUsuario()->hasRole("ROLE_SUPER_ADMIN");
+    
+    $userId=$this->getUsuario()->getId();
+
+    $table = $dataTableFactory
+      ->create(['pageLength' => 100])
+      ->add('id', TextColumn::class, ['visible' => false, 'field' => 'p.id'])
+      ->add('name', TextColumn::class, ['field' => 'p.name', 'label' => "Name", 'orderable' => true])
+      ->add('number', NumberColumn::class, ['label' => 'Number', 'field' => 'p.number', 'orderable' => true, 'render' => function ($value, $context) {
+        if ($value == 0)
+          $value = "-";
+
+        $html = "<strong>
+                          {$value}
+                        </strong>";
+
+        return $html;
+      }])
+      ->add('position', TextColumn::class, ['label' => 'Position', 'field' => 'p.position', 'orderable' => true])
+      ->add('nationality', TextColumn::class, ['label' => 'Nationality', 'visible' => true, 'field' => 'p.nationality', 'orderable' => true])
+      ->add('birthdate', DateTimeColumn::class, ['field' => 'p.birthdate', 'format' => 'd/m/Y', 'label' => 'Birthdate', 'orderable' => true])
+      ->add('age', NumberColumn::class, ['field' => 'p.age', 'label' => 'Age', 'orderable' => true, 'orderField' => 'p.birthdate'])
+
+      ->add('options', TextColumn::class, ['label' => '...', 'className' => 'text-center', 'render' => function ($value, $context) use($isUser, $userId) {
+        /** @var Player $context */
+        $html= "<button type=\"button\" class=\"btn btn-light btn-xs font-dark editPlayer\" data-playerId=\"{$context->getId()}\">
+                  <span class=\"fa fa-edit\"></span> 
+                </button>
+                <button type=\"button\" class=\"btn btn-light btn-xs font-dark newNotification\" data-playerId=\"{$context->getId()}\">
+                  <span class=\"fa fa-share-alt\"></span> 
+                </button>
+                <a type=\"button\" target=\"_blank\" href=\"/html/player/{$context->getId()}/notifications\" class=\"btn btn-light btn-xs font-dark  notificationsFromPlayer\" data-playerId=\"{$context->getId()}\">
+                  <span class=\"fa fa-list\"></span> 
+                </a>                
+                <button type=\"button\" class=\"btn btn-danger btn-xs font-dark deletePlayer\" data-playerId=\"{$context->getId()}\">
+                  <span class=\"fa fa-trash\"></span> 
+                </button>";
+        
+        if($isUser){
+          $isSubscribed=$context->isSubscribed($userId);
+          $classBtn="btn-light";
+          $iconBtn="fa-chain-broken";
+          if($isSubscribed){
+            $classBtn="btn-primary";
+            $iconBtn="fa-chain";
+          }
+
+
+          $html="<button type=\"button\" class=\"btn {$classBtn} btn-xs font-dark subscribeUnsubscribe\" data-playerId=\"{$context->getId()}\">
+                    <span class=\"fa {$iconBtn}\"></span> 
+                </button>";
+        }
+
+        return $html;
+      }])
+      ->createAdapter(ORMAdapter::class, [
+        'entity' => Player::class,
+        'query' => function (QueryBuilder $builder) {
+          $builder
+            ->select(['p', 't'])
+            ->from(Player::class, 'p')
+            ->leftJoin('p.team', 't');
+        }
+      ])
+      ->addOrderBy('name', DataTable::SORT_DESCENDING)
+      ->handleRequest($request);
+
+
+    if ($table->isCallback())
+      return $table->getResponse();
+  }
 
   /**
    * Endpoint to delete Player
@@ -192,9 +352,6 @@ class PlayerController extends HelperController{
 
     $this->getManager()->persist($notification);
     $this->getManager()->flush();
-
-    $htmlMail = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/theme/mail/index.html");
-    $htmlMail = str_replace("{host}", $this->getRequest()->getSchemeAndHttpHost(), $htmlMail);
 
     //dispatch event to send email to subscribed users
 

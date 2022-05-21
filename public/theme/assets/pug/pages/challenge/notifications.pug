@@ -1,0 +1,41 @@
+- var datatable             = true;
+- var theme_customizer      = false;
+- var tooltip               = true;
+- var sidebar               = false;
+- var scrollbar             = true;
+- var sweetalert2           = true;
+
+doctype html
+html(lang='en')
+  include ../../components/header-files
+  body
+    include ../../components/taptop
+    // page-wrapper Start
+    #pageWrapper.page-wrapper.compact-wrapper
+      include ../../components/header
+      // Page Body Start
+      .page-body-wrapper
+        .page-body(style="margin-left: 0px;")
+          .container-fluid
+            .page-title
+              .row
+                .col-12.col-sm-6
+                  h3
+                    | Notifications List
+                .col-12.col-sm-6
+                  ol.breadcrumb
+                    li.breadcrumb-item
+                      a(href='index.html')                                        
+                        i(data-feather="home")
+                    li.breadcrumb-item Notifications
+                    li.breadcrumb-item.active List
+          // Container-fluid starts
+          .container-fluid
+            .row
+              // Server Side Processing start
+              .col-sm-12
+                .card
+                  .card-body
+                    .notifications-list
+        include ../../components/footer
+    include ../../components/footer-files

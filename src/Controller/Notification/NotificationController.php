@@ -18,7 +18,11 @@ use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-
+use Omines\DataTablesBundle\DataTableFactory;
+use Omines\DataTablesBundle\DataTable;
+use Omines\DataTablesBundle\Column\TextColumn;
+use Omines\DataTablesBundle\Column\DateTimeColumn;
+use Doctrine\ORM\QueryBuilder;
 /**
  * Notification controller
  * @Route("/api/notification", name="api_notification_")
@@ -105,6 +109,64 @@ class NotificationController extends HelperController{
     return $this->successResponse("The notification was created",201);
   }
 
+  /**
+   * Endpoint to list notifications with datatables output
+   * @Route("/list", methods={"POST"}, options={"expose"=true}, name="list")
+   * @SWG\Tag(name="Notification")
+   * @SWG\Response(response="200",
+   *                description="return player list",              
+   *                @SWG\Definition(definition="paginator",
+   *                   allOf={
+   *                     @SWG\Schema(ref="#/definitions/datatables"),
+   *                     @SWG\Schema(
+   *                       @SWG\Property(
+   *                         property="data",
+   *                         type="array",
+   *                          @SWG\Items(ref=@Model(type=App\Entity\Challenge\Notification::class, groups={"Notification"}))
+   *                        )
+   *                     )
+   *                  })
+   * )
+   */
+  public function listAction(Request $request, DataTableFactory $dataTableFactory){
+    $table = $dataTableFactory
+      ->create(['pageLength' => 100])
+      ->add('id', TextColumn::class, ['visible' => false, 'field' => 'n.id'])
+      ->add('message', TextColumn::class, ['field' => 'n.message', 'label' => "Message", 'orderable' => true])
+      ->add('player', TextColumn::class, ['label' => 'Player', 'field' => 'p.name', 'orderable' => true, 'render' => function ($value, $context) {
+        
+        $html = "<strong>
+                  {$value}
+                  </strong>";
+
+        return $html;
+      }])
+      ->add('date', DateTimeColumn::class, ['field' => 'n.date', 'format' => 'd/m/Y', 'label' => 'Date Add', 'orderable' => true])
+      ->add('options', TextColumn::class, ['label' => '...', 'className' => 'text-center', 'render' => function ($value, $context) {
+
+        return "
+                        
+                        <button type=\"button\" class=\"btn btn-danger btn-xs font-dark deleteNotification\" data-notificationId=\"{$context->getId()}\">
+                          <span class=\"fa fa-trash\"></span> 
+                        </button>
+                        ";
+      }])
+      ->createAdapter(ORMAdapter::class, [
+        'entity' => Notification::class,
+        'query' => function (QueryBuilder $builder) {
+          $builder
+            ->select(['n', 'p'])
+            ->from(Notification::class, 'n')
+            ->leftJoin('n.player', 'p');
+        }
+      ])
+      ->addOrderBy('date', DataTable::SORT_DESCENDING)
+      ->handleRequest($request);
+
+
+    if ($table->isCallback())
+      return $table->getResponse();
+  }
 
   /**
    * Endpoint to delete Notification from database 

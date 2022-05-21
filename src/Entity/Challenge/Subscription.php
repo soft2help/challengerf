@@ -18,7 +18,7 @@ class Subscription implements dateInterface{
 
   /**
    * @var Player
-   * @ORM\ManyToOne(targetEntity="App\Entity\Challenge\Player", inversedBy="subscriptions", cascade={"persist", "remove"})
+   * @ORM\ManyToOne(targetEntity="App\Entity\Challenge\Player", inversedBy="subscriptions", cascade={"persist"})
    * @ORM\JoinColumn(name="PlayerId", referencedColumnName="Id", onDelete="CASCADE")
    */
   private $player;
