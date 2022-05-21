@@ -52,6 +52,16 @@ services:
         alias: fos_user.mailer.twig_swift
         public: true
     
+    App\EventListener\DoctrinePrePersist:
+        arguments: [ "@security.token_storage" ]
+        tags:
+            - { name: 'doctrine.event_listener', event: 'prePersist', priority: 500, connection: 'default' }
+
+    App\EventListener\DoctrinePreUpdate:
+        arguments: [ "@security.token_storage" ]
+        tags:
+            - { name: 'doctrine.event_listener', event: 'preUpdate', priority: 500, connection: 'default' }
+
     nelmio_api_doc.describers.quitarPaths:
         class: App\Helpers\Nelmios\defaultDescriber
         arguments: 
