@@ -66,6 +66,11 @@ To add a default user fixture you can use
 /var/www$ sudo -u www-data php bin/console  doctrine:fixtures:load --group=defaultuser --append
 ``` 
 
+Before use command line you can check helper appending --help to the command, for example:
+```
+/var/www$ sudo php bin/console user:admin:add --help
+```
+
 Create admin user with command line to access backoffice
 ```
 /var/www$ sudo php bin/console user:admin:add --username=admin@admin.com --password=Rf2022_
@@ -75,4 +80,9 @@ Create user to access backoffice (use a real email to receive notifications from
 
 ```
 /var/www$ sudo php bin/console user:user:add --username=user@user.com --password=Rf2022_
+```
+
+Delete notifications older than one week
+```
+/var/www$ sudo php bin/console app:delete:notifications
 ```
