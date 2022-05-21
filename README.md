@@ -86,3 +86,29 @@ Delete notifications older than one week
 ```
 /var/www$ sudo php bin/console app:delete:notifications
 ```
+
+To try endpoints endpoints without frontend, you can use oauth and use Bearer token, to do this you should create a client
+```
+/var/www$ sudo php bin/console fos:oauth-server:create-client  --grant-type="password"
+```
+
+Pick client Id and client secret from output, and then call endpoint 
+
+/oauth/v2/token?client_id={clientIdFromOutput}&client_secret={clientSecretFromOutput}&grant_type=password&username={username}&password={password}
+
+then you will receive json response with bearer token to use in api, the response have this output
+{
+    "access_token": "Mjg2OTJjZjU2NmI5NTQxZGIzZDhjOGViMDJjZmFiNzRkZThjZDY2MTIyM2U4YWE5NTZmNmYxMT",
+    "expires_in": 86400,
+    "token_type": "bearer",
+    "scope": "profesional",
+    "refresh_token": "YjRhMGEwMjhkOTgyZmY0NzRlMGM3NGQ1YjUyNWE2NWJmMTU4NGEwNTkyYWQwMTMzOD"
+}
+
+To use api put Authorization header with Bearer Mjg2OTJ... and also put Content-Type: application/json
+
+To check documentation about api you can use public endpoint from your browser
+
+**/api/doc**
+
+
