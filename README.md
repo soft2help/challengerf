@@ -174,7 +174,7 @@ To run unit test
 
 you can append --debug if you want more details
 
-##TODO
+## TODO
 - Websocket connection with nodejs websocket server, to send notifications in real time when user is logged in or receive player updates
 - List of Subscriptions by player in admin dashboard
 - More unit tests
